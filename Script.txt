@@ -1,0 +1,46 @@
+import os
+import pandas as pd
+import csv
+import datetime as dt
+df= pd.read_csv("IXE_input_file.csv")
+id_list = []
+location_list = []
+status_list = []
+
+now = dt.datetime.now()
+dt_string = now.strftime("%d%m%Y%H%M%S")
+
+for index, row in df.iterrows():
+    response = os.system('ping -n 2 -w 35' +' '+ row['id'])
+    if response == 0:
+        id_list.append(row['id'])
+        location_list.append(row['location'])
+        status_list.append("Active")
+    else:
+        id_list.append(row['id'])
+        location_list.append(row['location'])
+        status_list.append("In active")
+
+data = {
+    'id':id_list,
+    'location':location_list,
+    'status':status_list
+}
+
+df = pd.DataFrame.from_dict(data)
+df.to_csv(dt_string + '.csv')
+    
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
